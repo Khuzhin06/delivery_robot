@@ -12,10 +12,14 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_Dialog):
         self.Port.addItems(serial_ports())
         self.Speed.addItems(speeds)
         self.realport = None
-        self.connect.pressed.connect(self.connect_)
-        # self.EnableBtn.clicked.connect(self.send)
+        self.connect.pressed.connect(self.connection)
+        self.Right.stateChanged.connect(self.send)
+        self.Left.stateChanged.connect(self.send)
+        self.Front_2.stateChanged.connect(self.send)
+        self.Back.stateChanged.connect(self.send)
+        # self.sl = {self.Right: '', self.Back: '', self.Front_2: '', self.Left: ''}
 
-    def connect_(self):
+    def connection(self):
         try:
             self.realport = serial.Serial(self.Port.currentText(), int(self.Speed.currentText()))
             self.ConnectButton.setStyleSheet("background-color: green")
@@ -25,8 +29,19 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_Dialog):
 
     def send(self):
         if self.realport:
-            self.realport.write(b'1')
-
+            if self.sender().isChecked():
+                if self.sender() == self.Left:
+                    self.realport.write(b'3')
+                if self.sender() == self.Right:
+                    self.realport.write(b'4')
+                if self.sender() == self.Front_2:
+                    self.realport.write(b'1')
+                if self.sender() == self.Back:
+                    self.realport.write(b'2')
+                data = self.realport.readline().decode('ascii')
+                print(data)
+            else:
+                self.realport.write(b'0')
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

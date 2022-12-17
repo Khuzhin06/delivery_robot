@@ -15,11 +15,29 @@ void loop() {
   if(HC06.available() > 0) //When HC06 receive something
   {
     char receive = HC06.read(); //Read from Serial Communication
-    if(receive == '1') //If received data is 1, turn on the LED and send back the sensor data
+    if(receive == '1')
     {
       digitalWrite(12, HIGH); 
       int data = analogRead(LDR);
-      HC06.println(data);
+      HC06.println('front');
+    }
+    elif(receive == '2')
+    {
+      digitalWrite(12, HIGH);
+      int data = analogRead(LDR);
+      HC06.println('back');
+    }
+    elif(receive == '3')
+    {
+      digitalWrite(12, HIGH);
+      int data = analogRead(LDR);
+      HC06.println('left');
+    }
+    elif(receive == '4')
+    {
+      digitalWrite(12, HIGH);
+      int data = analogRead(LDR);
+      HC06.println('right');
     }
     else digitalWrite(12, LOW);//If received other data, turn off LED
   }
