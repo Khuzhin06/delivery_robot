@@ -1,7 +1,7 @@
 import sys  # sys нужен для передачи argv в QApplication
 from PyQt5 import QtWidgets
 import design
-from port import serial_ports, speeds
+from delivery_robot.v2.port import serial_ports, speeds
 import serial
 
 
