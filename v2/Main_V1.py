@@ -1,8 +1,10 @@
 import sys  # sys нужен для передачи argv в QApplication
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication
 from delivery_robot.v2 import design
 from port import serial_ports, speeds
 import serial
+import sqlite3
 
 
 class LedApp(QtWidgets.QMainWindow, design.Ui_Dialog):
@@ -43,8 +45,21 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_Dialog):
             else:
                 self.realport.write(b'0')
 
+    def base(self):
+        self.con = sqlite3.connect("data_base.db")
+        self.cur = self.con.cursor()
+        way, b = self.cur.execute(
+            "SELECT way, name FROM base WHERE name = 'prototip'").fetchall()[0]
+        print(way)
+        self.con.close()
+
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
+
+
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = LedApp()
-    window.show()
-    app.exec_()
+    app = QApplication(sys.argv)
+    form = LedApp()
+    form.show()
+    sys.excepthook = except_hook
+    sys.exit(app.exec())
