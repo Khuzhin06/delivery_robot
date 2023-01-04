@@ -40,10 +40,9 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_Dialog):
                     self.realport.write(b'1')
                 if self.sender() == self.Back:
                     self.realport.write(b'2')
-                data = self.realport.readline().decode('ascii')
-                print(data)
             else:
                 self.realport.write(b'0')
+        self.base()
 
     def base(self):
         self.con = sqlite3.connect("data_base.db")
@@ -51,7 +50,12 @@ class LedApp(QtWidgets.QMainWindow, design.Ui_Dialog):
         way, b = self.cur.execute(
             "SELECT way, name FROM base WHERE name = 'prototip'").fetchall()[0]
         print(way)
+        way = str(way)
+        for i in range(10):
+            print(way[i: i + 5])
+            way = way[4 + i:i + 10]
         self.con.close()
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
